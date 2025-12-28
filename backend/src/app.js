@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.json({ message: "Chat App Server is running" });
+  res.json({ message: "Chat App Server is running at WSA" });
 });
 
 export { app };
