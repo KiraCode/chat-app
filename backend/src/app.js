@@ -1,12 +1,16 @@
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
+import { handleClerkWebhook } from "../controllers/userController.js";
 
 const app = express();
 
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.json({ message: "Chat App Server is running at WSA" });
-});
+app.post(
+  "/api/users/webhooks",
+  bodyParser.raw({ type: "application/json" }),
+  handleClerkWebhook
+);
 
 export { app };
