@@ -1,4 +1,5 @@
 import { Webhook } from "svix";
+import User from "../src/models/userModel.js";
 
 const handleClerkWebhook = async (req, res) => {
   try {
@@ -35,9 +36,46 @@ const handleClerkWebhook = async (req, res) => {
 
     // check if the event Type is "user.created". This is the beginning of the specific handler code for user creation events
     if (eventType === "user.created") {
-      console.log("user created Triggered");
+      try {
+        // find if any user exist user id
+        const userExists = await User.findOne({ clerkUserId: id });
+
+        if (userExists) {
+          return res
+            .status(400)
+            .json({ success: false, message: "user already exists" });
+        }
+
+        const newUser = new User({
+          clerkUserId: id,
+          email: attributes.email_addresses[0].email_address,
+          username: attributes.username || "",
+          firstName: attributes.first_name || "",
+          lastName: attributes.last_name || "",
+          profileImage: attributes.profile_image_url || "",
+        });
+
+        await newUser.save();
+
+        res.status(200).json({ success: true, message: "User Created" });
+      } catch (error) {
+        res.status(400).json({ success: false, message: "user not created" });
+      }
     } else if (eventType === "user.updated") {
-      console.log("user updated triggered");
+      // find the user in mongodb
+      const updateUser = await User.updateOne(
+        {
+          clerkUserId: id,
+        },
+        {
+          $set: {
+            email: attributes.email_addresses[0].email_address,
+            firstName: attributes.first_name,
+            lastName: attributes.last_name,
+            username: attributes.username,
+          },
+        }
+      );
     }
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
