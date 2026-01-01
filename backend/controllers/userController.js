@@ -62,20 +62,59 @@ const handleClerkWebhook = async (req, res) => {
         res.status(400).json({ success: false, message: "user not created" });
       }
     } else if (eventType === "user.updated") {
-      // find the user in mongodb
-      const updateUser = await User.updateOne(
-        {
-          clerkUserId: id,
-        },
-        {
-          $set: {
-            email: attributes.email_addresses[0].email_address,
-            firstName: attributes.first_name,
-            lastName: attributes.last_name,
-            username: attributes.username,
+      try {
+        // find the user in mongodb
+        const updateUser = await User.updateOne(
+          {
+            clerkUserId: id,
           },
+          {
+            $set: {
+              email: attributes.email_addresses[0].email_address,
+              firstName: attributes.first_name,
+              lastName: attributes.last_name,
+              username: attributes.username,
+              profileImage: attributes.profile_image_url,
+            },
+          }
+        );
+
+        // validate
+        if (updateUser.modifiedCount > 0) {
+          console.log(`User with Clerk id - ${id}, Updated Successfully`);
+        } else {
+          console.log(`No User with Clerk id - ${id} found`);
         }
-      );
+
+        res
+          .status(200)
+          .json({ success: true, message: "User updated successfully" });
+      } catch (error) {
+        res.status(400).json({ success: false, message: "User not updated" });
+      }
+    }
+
+    if (eventType === "user.deleted") {
+      try {
+        const deletedUser = await User.deleteOne({ clerkUserId: id });
+        if (deletedUser.deletedCount > 0) {
+          console.log(`User with clerkUserId ${id} deleted Successfully`);
+          res
+            .status(200)
+            .json({ success: true, message: "User deleted Success" });
+        } else {
+          console.log(
+            `No user found with clerkUserId: ${id}, nothing to delete`
+          );
+        }
+      } catch (error) {
+        res
+          .status(400)
+          .json({
+            success: false,
+            message: "Something went wrong, while deleting",
+          });
+      }
     }
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
