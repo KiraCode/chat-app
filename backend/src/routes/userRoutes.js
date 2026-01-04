@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import {
   getUsersForSidebar,
   handleClerkWebhook,
-} from "../../controllers/userController.js";
+} from "../controllers/userController.js";
 import { requireAuth } from "@clerk/express";
 
 const userRouter = express.Router();

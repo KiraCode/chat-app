@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { handleClerkWebhook } from "../controllers/userController.js";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import userRouter from "./routes/userRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 
 const app = express();
 
@@ -14,6 +14,8 @@ app.use("/api/users", userRouter);
 // never user express.json with body parser
 
 app.use(express.json());
+
+app.use("/api/messages", messageRoutes);
 
 app.get("/api/test", requireAuth(), (req, res) => {
   res.json({ message: "Authenticated", userId: req.auth.userId });
