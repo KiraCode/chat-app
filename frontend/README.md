@@ -1,16 +1,56 @@
-# React + Vite
+# Steps for installation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. Install vite using the following command
 
-Currently, two official plugins are available:
+   `npm create vite@latest`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. Install tailwindCss reading the documentation attach in this
+   [link](https://v3.tailwindcss.com/docs/guides/vite).
 
-## React Compiler
+3. Run the following code to install daisyUI in your project
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+   `npm install daisyui@4`
 
-## Expanding the ESLint configuration
+4. configure your `tailwind.config.js` file with the following lines of code.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+   ```/** @type {import('tailwindcss').Config} */
+   import daisyui from "daisyui";
+   import tailwindScrollbar from "tailwind-scrollbar";
+   import daisyUIThemes from "daisyui/src/theming/themes";
+   export default {
+        content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+        theme: {
+            extend: {},
+        },
+        plugins: [daisyui, tailwindScrollbar],
+            daisyui: {
+                themes: [
+                "light",
+                "retro",
+                "coffee",
+                "emerald",
+                "valentine",
+                {
+                    dark: {
+                        ...daisyUIThemes["dark"],
+                        primary: "rgb(29, 155, 240)",
+                        secondary: "rgb(24, 24, 24)",
+                    },
+                },
+            ],
+        },
+   };
+   ```
+
+5. Install react-router-dom from the follwing command
+
+   `npm i react-router-dom@7`
+
+6. Install Clerk Authentication reading the documentation attach in this
+   [link](https://clerk.com/docs/quickstarts/react).
+
+7. Install Clerk Themes reading the documentation attach in this
+   [link](https://clerk.com/docs/customization/themes).
+
+8. Install Lucide React icon library reading the documentation attach in this
+   [link](https://lucide.dev/guide/packages/lucide-react).
