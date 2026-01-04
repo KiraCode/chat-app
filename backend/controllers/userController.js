@@ -108,12 +108,10 @@ const handleClerkWebhook = async (req, res) => {
           );
         }
       } catch (error) {
-        res
-          .status(400)
-          .json({
-            success: false,
-            message: "Something went wrong, while deleting",
-          });
+        res.status(400).json({
+          success: false,
+          message: "Something went wrong, while deleting",
+        });
       }
     }
   } catch (error) {
@@ -121,4 +119,19 @@ const handleClerkWebhook = async (req, res) => {
   }
 };
 
-export { handleClerkWebhook };
+const getUsersForSidebar = async (req, res) => {
+  try {
+    const currentUser = req.auth?.userId;
+
+    const filteredUsers = await User.find({
+      clerkUserId: { $ne: currentUser },
+    });
+
+    res.status(200).json(filteredUsers);
+  } catch (error) {
+    console.error("Error in getUserFor Sidebar Controller: ", error.messager);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export { handleClerkWebhook, getUsersForSidebar };
